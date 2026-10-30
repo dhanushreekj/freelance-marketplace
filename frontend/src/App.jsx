@@ -1,16 +1,31 @@
-import { useEffect, useState } from 'react';
-import api from './api/axios';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Home from './pages/Home';
 
 function App() {
-  const [msg, setMsg] = useState('Checking backend...');
-
-  useEffect(() => {
-    api.get('/health')
-      .then((res) => setMsg(`Backend OK. Skills in database: ${res.data.skillsInDb}`))
-      .catch(() => setMsg('Cannot reach backend'));
-  }, []);
-
-  return <h2 style={{ padding: 24 }}>{msg}</h2>;
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
 export default App;
