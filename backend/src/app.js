@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const pool = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const uploadsDir = path.join(__dirname, '..', 'uploads');
 fs.mkdirSync(uploadsDir, { recursive: true });
@@ -16,6 +17,8 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 app.use('/uploads', express.static(uploadsDir));
 app.use('/api/auth', authRoutes);
+app.use('/api', profileRoutes);
+
 
 app.get('/', (req, res) => {
   res.json({ message: 'Freelance Marketplace API is running' });
